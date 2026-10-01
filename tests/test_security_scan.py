@@ -7,11 +7,23 @@ ROOT = Path(__file__).resolve().parents[1]
 
 FORBIDDEN_PATTERNS = {
     "MediaWiki exported user token": re.compile(
-        r'\b(?:csrfToken|watchToken|patrolToken)"\s*:\s*"[^"]+',
+        r'\b(?:csrfToken|watchToken|patrolToken)"\s*:\s*"(?!REDACTED_TOKEN")[^"]+',
         re.IGNORECASE,
     ),
     "MediaWiki user token export block": re.compile(
         r"\bmw\.user\.tokens\.set\s*\(",
+        re.IGNORECASE,
+    ),
+    "Authenticated MediaWiki username": re.compile(
+        r'"wgUserName"\s*:\s*"(?!REDACTED_USER")',
+        re.IGNORECASE,
+    ),
+    "Authenticated MediaWiki numeric user id": re.compile(
+        r'"wgUserId"\s*:\s*\d+',
+        re.IGNORECASE,
+    ),
+    "MediaWiki user registration metadata": re.compile(
+        r'"wgNoticeUserData"\s*:',
         re.IGNORECASE,
     ),
     "Browser extension script URL": re.compile(
